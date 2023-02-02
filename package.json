@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/viannapvictor/gulp#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.1",
     "bootstrap": "^5.2.3",
     "jquery": "^3.6.3"
   },
