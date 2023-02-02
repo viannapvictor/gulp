@@ -11,6 +11,8 @@ const stripCss = require('gulp-strip-css-comments')
 const htmlmin = require('gulp-htmlmin')
 const { series, parallel } = require('gulp')
 const babel = require('gulp-babel')
+const browserSync = require('browser-sync').create()
+const reload = browserSync.reload
 
 function tarefasCSS(cb) {
 
@@ -38,7 +40,7 @@ function tarefasJS(callback){
         './node_modules/bootstrap/dist/js/bootstrap.js',
         './vendor/owl/js/owl.js',
         './vendor/jquery-mask/jquery.mask.js',
-        './vendor/jquery-ui-1.13.2.custom/jquery-ui.js',
+        //'./vendor/jquery-ui-1.13.2.custom/jquery-ui.js',
         './node_modules/@fortawesome/fontawesome-free/js/fontawesome.js',
         './src/js/custom.js'
 
@@ -82,9 +84,27 @@ function tarefasHTML(callback) {
 
 }
 
+gulp.task('serve', function(){
+
+    browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    })
+    gulp.watch('./src/**/*').on('change', process) // repete o processo quando alterar algo em src
+    gulp.watch('./src/**/*').on('change', reload)
+
+})
+
+function end(callback) {
+    console.log("Concluded")
+    return callback()
+}
+
+const process = series( tarefasHTML, tarefasJS, tarefasCSS, end)
 
 exports.styles = tarefasCSS
 exports.scripts = tarefasJS
 exports.images = tarefasImagem
 
-exports.default = parallel(tarefasHTML, tarefasCSS, tarefasCSS)
+exports.default = process
